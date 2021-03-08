@@ -1,4 +1,4 @@
-# Pattern_Training
+# Pattern Training
 
   Code for training pseudo-bayes patterns
 
