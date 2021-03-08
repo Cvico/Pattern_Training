@@ -40,7 +40,7 @@ class Muon(object):
 
     def printHits(self):
         for l in self.cellHits:
-            print  l.parent.idx, l.idx
+            print(l.parent.idx, l.idx)
 
     def getPattern(self):
         self.pattern = []

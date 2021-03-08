@@ -1,12 +1,20 @@
+import sys, os
 import numpy as np
 import matplotlib.pyplot as plt
 from stationsObjects import*
 import copy
 import pickle
 
+# Input variable
+if len(sys.argv) < 2 :
+    print("Please tell me which MB you want to train the patterns for: MB or MB4")
+    print("")
+    print("python trainPatterns_forCMSSW.py MB")
+    print("python trainPatterns_forCMSSW.py MB4")
+    sys.exit()
 
-#mmax = -10000
-#mmax =  2*MBTrain.layers[0].DTlist[0].height/MBTrain.layers[0].DTlist[0].width 
+MB_input = sys.argv[1]
+print("MB to use: " + MB_input)
 
 # Maximum slope allowed for a pattern (mmax is the atan of the phi angle)
 mmax = 0.3
@@ -16,14 +24,22 @@ allSeeds    = [] #Naming convention is [SLdown, SLup, diff in units of halfs of 
 
 # Choose which MB use for training,
 # considering those defined in stationsObjects.py
-MB_train   = MBTrain
-MB_train_f = MBTrainf
-#MB_train   = MB4
-#MB_train_f = MB4f
-
+if MB_input == "MB":
+    MB_train   = MBTrain
+    MB_train_f = MBTrainf
+elif MB_input == "MB4": 
+    MB_train   = MB4
+    MB_train_f = MB4f
+else:
+    raise ValueError("Input must be 'MB' or 'MB4'")
+    
 # Output file name
-output_file_name = "trainedPatterns_MB.pck"
-#output_file_name = "trainedPatterns_MB4.pck"
+if MB_input == "MB":
+    output_file_name = "trainedPatterns_MB.pck"
+elif MB_input == "MB4": 
+    output_file_name = "trainedPatterns_MB4.pck"
+else:
+    raise ValueError("Input must be 'MB' or 'MB4'")
 
 # Generate all sets of semilayer-semilayer patterns
 
@@ -158,9 +174,9 @@ for i in range(len(allPatterns)):
       # print allSeeds[i], allPatterns[i]
       # print "---------------------------------"
 
-print "Patterns: ", len(listPatterns)
+print("Patterns: ", len(listPatterns))
 
-pick = open(output_file_name, "w")
+pick = open(output_file_name, "wb") 
 pickle.dump(listPatterns, pick)
 
 """
