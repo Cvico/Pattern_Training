@@ -14,146 +14,59 @@ mmax = 0.3
 allPatterns = []
 allSeeds    = [] #Naming convention is [SLdown, SLup, diff in units of halfs of cell width] == [SLup, SLdown, -diff]
 
+# Choose which MB use for training,
+# considering those defined in stationsObjects.py
+MB_train   = MBTrain
+MB_train_f = MBTrainf
+#MB_train   = MB4
+#MB_train_f = MB4f
+
+# Output file name
+output_file_name = "trainedPatterns_MB.pck"
+#output_file_name = "trainedPatterns_MB4.pck"
 
 # Generate all sets of semilayer-semilayer patterns
 
-# --> Positive slope, left laterality
-######################################################################################
+#################################################
+### Starting from correlated sets of patterns ###
+#################################################
+
+#################################################
 # Starting point: each layer of SL1 (l_in_sl1), 
-# first cell (starting from the left), left laterality,
-# and positive slope 
-for l_in_sl1 in range(0, 4):
-    print("")
-    print("Layer in SL1 = {}".format(l_in_sl1))
-    x0 = MBTrain.layers[l_in_sl1].DTlist[0].xmin + MBTrain.layers[l_in_sl1].DTlist[0].width/4. 
-    y0 = MBTrain.layers[l_in_sl1].DTlist[0].ymin + MBTrain.layers[l_in_sl1].DTlist[0].height/2.
+# first cell (starting from left or right), 
+# both lateralities, positive and negative slope 
 
-    # Final point: each layer of SL3: consider all valid cells and both lateralities
-    for l_in_sl3 in range(4, 8):
-        print("Layer in SL3 = {}".format(l_in_sl3))
-        for d in MBTrain.layers[l_in_sl3].DTlist:
-            # Consider both lateralities
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf-y0)/(xf-x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0, y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                if (l_in_sl3 == 7 and l_in_sl1 == 0):
-                    mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl1, l_in_sl3, d.idx - MBTrain.layers[l_in_sl1].DTlist[0].idx])
+for slope in [0, -1]:
+    for lat in [0.25, 0.75]:
+        for l_in_sl1 in range(0, 4):
+            print("")
+            print("Layer in SL1 = {}".format(l_in_sl1))
+            x0 = MB_train.layers[l_in_sl1].DTlist[slope].xmin + lat*MB_train.layers[l_in_sl1].DTlist[slope].width 
+            y0 = MB_train.layers[l_in_sl1].DTlist[slope].ymin + MB_train.layers[l_in_sl1].DTlist[slope].height/2.
 
-
-# --> Negative slope, left laterality
-######################################################################################
-# Starting point: each layer of SL1 (l_in_sl1), 
-# first cell (starting from the right), left laterality,
-# and negative slope 
-
-for l_in_sl1 in range(0, 4):
-    print("")
-    print("Layer in SL1 = {}".format(l_in_sl1))
-    x0 = MBTrain.layers[l_in_sl1].DTlist[-1].xmin + MBTrain.layers[l_in_sl1].DTlist[-1].width/4. 
-    y0 = MBTrain.layers[l_in_sl1].DTlist[-1].ymin + MBTrain.layers[l_in_sl1].DTlist[-1].height/2.
-
-    # Final point: each layer of SL3: consider all valid cells and both lateralities
-    for l_in_sl3 in range(4, 8):
-        print("Layer in SL3 = {}".format(l_in_sl3))
-        for d in MBTrain.layers[l_in_sl3].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0, y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl1, l_in_sl3, d.idx - MBTrain.layers[l_in_sl1].DTlist[-1].idx])
-
-
-
-# --> Positive slope, right laterality
-######################################################################################
-# Starting point: each layer of SL1 (l_in_sl1), 
-# first cell (starting from the left), right laterality,
-# and positive slope 
-
-for l_in_sl1 in range(0, 4):
-    print("")
-    print("Layer in SL1 = {}".format(l_in_sl1))
-    x0 = MBTrain.layers[l_in_sl1].DTlist[0].xmin + 3*MBTrain.layers[l_in_sl1].DTlist[0].width/4. 
-    y0 = MBTrain.layers[l_in_sl1].DTlist[0].ymin +   MBTrain.layers[l_in_sl1].DTlist[0].height/2.
-
-    # Final point: each layer of SL3: consider all valid cells and both lateralities
-    for l_in_sl3 in range(4, 8):
-        print("Layer in SL3 = {}".format(l_in_sl3))
-        for d in MBTrain.layers[l_in_sl3].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl1, l_in_sl3, d.idx - MBTrain.layers[l_in_sl1].DTlist[0].idx])
-
-
-# --> Negative slope, right laterality
-######################################################################################
-# Starting point: each layer of SL1 (l_in_sl1), 
-# first cell (starting from the right), right laterality,
-# and negative slope 
-
-for l_in_sl1 in range(0, 4):
-    print("")
-    print("Layer in SL1 = {}".format(l_in_sl1))
-    x0 = MBTrain.layers[l_in_sl1].DTlist[-1].xmin + 3*MBTrain.layers[l_in_sl1].DTlist[-1].width/4. 
-    y0 = MBTrain.layers[l_in_sl1].DTlist[-1].ymin +   MBTrain.layers[l_in_sl1].DTlist[-1].height/2.
-
-    # Final point: each layer of SL3: consider all valid cells and both lateralities
-    for l_in_sl3 in range(4, 8):
-        print("Layer in SL3 = {}".format(l_in_sl3))
-        for d in MBTrain.layers[l_in_sl3].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl1, l_in_sl3, d.idx - MBTrain.layers[l_in_sl1].DTlist[-1].idx])
-
+            # Final point: each layer of SL3: consider all valid cells and both lateralities
+            for l_in_sl3 in range(4, 8):
+                print("Layer in SL3 = {}".format(l_in_sl3))
+                for d in MB_train.layers[l_in_sl3].DTlist:
+                    # Consider both lateralities
+                    for semicell in [0.25, 0.75]:
+                        xf = d.xmin + semicell*d.width
+                        if abs(xf - x0) < 0.1*d.width: 
+                            m = 100000
+                        else:
+                            yf = d.ymin + d.height/2.
+                            m = (yf - y0)/(xf - x0)
+                        if abs(m) < mmax:  continue
+                        mm = Muon(x0, y0, m)
+                        #if m < mmax: 
+                        if slope == -1:
+                            mm.color = "k-"
+                        MB_train_f.checkIn(mm)
+                        if (l_in_sl3 == 7 and l_in_sl1 == 0):
+                            mm.plot()        
+                        if abs(m) > mmax:
+                            allPatterns.append(mm.getPattern())
+                            allSeeds.append([l_in_sl1, l_in_sl3, d.idx - MB_train.layers[l_in_sl1].DTlist[slope].idx])
 
 
 #################################################
@@ -162,286 +75,78 @@ for l_in_sl1 in range(0, 4):
 
 # Starting from uncorrelated in SL1
 
-# --> Positive slope, left laterality
-######################################################################################
+#################################################
 # Starting point: each layer of SL1 (l_in_sl1), 
-# first cell (starting from the left), left laterality,
-# and positive slope 
+# first cell (starting from left or right), 
+# both lateralities, positive and negative slope 
 
-for l_in_sl1 in range(0, 4):
-    print("")
-    print("Lower layer in SL1 = {}".format(l_in_sl1))
-    x0 = MBTrain.layers[l_in_sl1].DTlist[0].xmin + MBTrain.layers[l_in_sl1].DTlist[0].width/4. 
-    y0 = MBTrain.layers[l_in_sl1].DTlist[0].ymin + MBTrain.layers[l_in_sl1].DTlist[0].height/2.
+for slope in [0, -1]:
+    for lat in [0.25, 0.75]:
+        for l_in_sl1 in range(0, 4):
+            print("")
+            print("Lower layer in SL1 = {}".format(l_in_sl1))
+            x0 = MB_train.layers[l_in_sl1].DTlist[slope].xmin + lat*MB_train.layers[l_in_sl1].DTlist[slope].width
+            y0 = MB_train.layers[l_in_sl1].DTlist[slope].ymin + MB_train.layers[l_in_sl1].DTlist[slope].height/2.
 
-    # Final point: each layer of SL1 (excluding the one from where we start), 
-    # considering all valid cells and both lateralities
-    for l_in_sl1_up in range(l_in_sl1 + 1, 4):
-        print("Upper layer in SL1 = {}".format(l_in_sl1_up))
-        for d in MBTrain.layers[l_in_sl1_up].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl1, l_in_sl1_up, d.idx - MBTrain.layers[l_in_sl1].DTlist[0].idx])
-
-
-# --> Negative slope, left laterality
-######################################################################################
-# Starting point: each layer of SL1 (l_in_sl1), 
-# first cell (starting from the left), left laterality,
-# and negative slope 
-
-for l_in_sl1 in range(0, 4):
-    print("")
-    print("Lower layer in SL1 = {}".format(l_in_sl1))
-    x0 = MBTrain.layers[l_in_sl1].DTlist[-1].xmin + MBTrain.layers[l_in_sl1].DTlist[-1].width/4. 
-    y0 = MBTrain.layers[l_in_sl1].DTlist[-1].ymin + MBTrain.layers[l_in_sl1].DTlist[-1].height/2.
-
-    # Final point: each layer of SL1 (excluding the one from where we start), 
-    # considering all valid cells and both lateralities
-    for l_in_sl1_up in range(l_in_sl1 + 1, 4):
-        print("Upper layer in SL1 = {}".format(l_in_sl1_up))
-        for d in MBTrain.layers[l_in_sl1_up].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl1, l_in_sl1_up, d.idx - MBTrain.layers[l_in_sl1].DTlist[-1].idx])
-
-
-# --> Positive slope, right laterality
-######################################################################################
-# Starting point: each layer of SL1 (l_in_sl1), 
-# first cell (starting from the left), right laterality,
-# and positive slope 
-
-for l_in_sl1 in range(0, 4):
-    print("")
-    print("Lower layer in SL1 = {}".format(l_in_sl1))
-    x0 = MBTrain.layers[l_in_sl1].DTlist[0].xmin + 3*MBTrain.layers[l_in_sl1].DTlist[0].width/4. 
-    y0 = MBTrain.layers[l_in_sl1].DTlist[0].ymin +   MBTrain.layers[l_in_sl1].DTlist[0].height/2.
-
-    # Final point: each layer of SL1 (excluding the one from where we start), 
-    # considering all valid cells and both lateralities
-    for l_in_sl1_up in range(l_in_sl1 + 1, 4):
-        print("Upper layer in SL1 = {}".format(l_in_sl1_up))
-        for d in MBTrain.layers[l_in_sl1_up].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl1, l_in_sl1_up, d.idx - MBTrain.layers[l_in_sl1].DTlist[0].idx])
-
-
-# --> Negative slope, right laterality
-######################################################################################
-# Starting point: each layer of SL1 (l_in_sl1), 
-# first cell (starting from the right), right laterality,
-# and negative slope 
-
-for l_in_sl1 in range(0, 4):
-    print("")
-    print("Lower layer in SL1 = {}".format(l_in_sl1))
-    x0 = MBTrain.layers[l_in_sl1].DTlist[-1].xmin + 3*MBTrain.layers[l_in_sl1].DTlist[-1].width/4. 
-    y0 = MBTrain.layers[l_in_sl1].DTlist[-1].ymin +   MBTrain.layers[l_in_sl1].DTlist[-1].height/2.
-
-    # Final point: each layer of SL1 (excluding the one from where we start), 
-    # considering all valid cells and both lateralities
-    for l_in_sl1_up in range(l_in_sl1 + 1, 4):
-        print("Upper layer in SL1 = {}".format(l_in_sl1_up))
-        for d in MBTrain.layers[l_in_sl1_up].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl1, l_in_sl1_up, d.idx - MBTrain.layers[l_in_sl1].DTlist[-1].idx])
+            # Final point: each layer of SL1 (excluding the one from where we start), 
+            # considering all valid cells and both lateralities
+            for l_in_sl1_up in range(l_in_sl1 + 1, 4):
+                print("Upper layer in SL1 = {}".format(l_in_sl1_up))
+                for d in MB_train.layers[l_in_sl1_up].DTlist:
+                    for semicell in [0.25, 0.75]:
+                        xf = d.xmin + semicell*d.width
+                        if abs(xf - x0) < 0.1*d.width: 
+                            m = 100000
+                        else:
+                            yf = d.ymin + d.height/2.
+                            m = (yf - y0)/(xf - x0)
+                        if abs(m) < mmax:  continue
+                        mm = Muon(x0,y0, m)
+                        if m < mmax: 
+                            mm.color = "k-"
+                        MB_train_f.checkIn(mm)
+                        # mm.plot()        
+                        if abs(m) > mmax:
+                            allPatterns.append(mm.getPattern())
+                            allSeeds.append([l_in_sl1, l_in_sl1_up, d.idx - MB_train.layers[l_in_sl1].DTlist[slope].idx])
 
 
 # And now uncorrelated in SL3
 
-# --> Positive slope, left laterality
-######################################################################################
+#################################################
 # Starting point: each layer of SL3 (l_in_sl3), 
-# first cell (starting from the left), left laterality,
-# and positive slope 
+# first cell (starting from left or right), 
+# both lateralities, positive and negative slope 
 
-for l_in_sl3 in range(4, 8):
-    print("")
-    print("Lower layer in SL3 = {}".format(l_in_sl3))
-    x0 = MBTrain.layers[l_in_sl3].DTlist[0].xmin + MBTrain.layers[l_in_sl3].DTlist[0].width/4. 
-    y0 = MBTrain.layers[l_in_sl3].DTlist[0].ymin + MBTrain.layers[l_in_sl3].DTlist[0].height/2.
+for slope in [0, -1]:
+    for lat in [0.25, 0.75]:
+        for l_in_sl3 in range(4, 8):
+            print("")
+            print("Lower layer in SL3 = {}".format(l_in_sl3))
+            x0 = MB_train.layers[l_in_sl3].DTlist[slope].xmin + lat*MB_train.layers[l_in_sl3].DTlist[slope].width
+            y0 = MB_train.layers[l_in_sl3].DTlist[slope].ymin + MB_train.layers[l_in_sl3].DTlist[slope].height/2.
 
-    # Final point: each layer of SL3 (excluding the one from where we start), 
-    # considering all valid cells and both lateralities
-    for l_in_sl3_up in range(l_in_sl3 + 1, 8):
-        print("Upper layer in SL3 = {}".format(l_in_sl3_up))
-        for d in MBTrain.layers[l_in_sl3_up].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl3, l_in_sl3_up, d.idx - MBTrain.layers[l_in_sl3].DTlist[0].idx])
-
-
-# --> Negative slope, left laterality
-######################################################################################
-# Starting point: each layer of SL3 (l_in_sl3), 
-# first cell (starting from the left), left laterality,
-# and negative slope 
-
-for l_in_sl3 in range(4, 8):
-    print("")
-    print("Lower layer in SL3 = {}".format(l_in_sl3))
-    x0 = MBTrain.layers[l_in_sl3].DTlist[-1].xmin + MBTrain.layers[l_in_sl3].DTlist[-1].width/4. 
-    y0 = MBTrain.layers[l_in_sl3].DTlist[-1].ymin + MBTrain.layers[l_in_sl3].DTlist[-1].height/2.
-
-    # Final point: each layer of SL3 (excluding the one from where we start), 
-    # considering all valid cells and both lateralities
-    for l_in_sl3_up in range(l_in_sl3 + 1, 8):
-        print("Upper layer in SL3 = {}".format(l_in_sl3_up))
-        for d in MBTrain.layers[l_in_sl3_up].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl3, l_in_sl3_up, d.idx - MBTrain.layers[l_in_sl3].DTlist[-1].idx])
-
-
-# --> Positive slope, right laterality
-######################################################################################
-# Starting point: each layer of SL3 (l_in_sl3), 
-# first cell (starting from the left), right laterality,
-# and positive slope 
-
-for l_in_sl3 in range(4, 8):
-    print("")
-    print("Lower layer in SL3 = {}".format(l_in_sl3))
-    x0 = MBTrain.layers[l_in_sl3].DTlist[0].xmin + 3*MBTrain.layers[l_in_sl3].DTlist[0].width/4. 
-    y0 = MBTrain.layers[l_in_sl3].DTlist[0].ymin +   MBTrain.layers[l_in_sl3].DTlist[0].height/2.
-
-    # Final point: each layer of SL1 (excluding the one from where we start), 
-    # considering all valid cells and both lateralities
-    for l_in_sl3_up in range(l_in_sl3 + 1, 8):
-        print("Upper layer in SL1 = {}".format(l_in_sl3_up))
-        for d in MBTrain.layers[l_in_sl3_up].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl3, l_in_sl3_up, d.idx - MBTrain.layers[l_in_sl3].DTlist[0].idx])
-
-
-# --> Negative slope, right laterality
-######################################################################################
-# Starting point: each layer of SL3 (l_in_sl3), 
-# first cell (starting from the right), right laterality,
-# and negative slope 
-
-for l_in_sl3 in range(4, 8):
-    print("")
-    print("Lower layer in SL3 = {}".format(l_in_sl3))
-    x0 = MBTrain.layers[l_in_sl3].DTlist[-1].xmin + 3*MBTrain.layers[l_in_sl3].DTlist[-1].width/4. 
-    y0 = MBTrain.layers[l_in_sl3].DTlist[-1].ymin +   MBTrain.layers[l_in_sl3].DTlist[-1].height/2.
-
-    # Final point: each layer of SL3 (excluding the one from where we start), 
-    # considering all valid cells and both lateralities
-    for l_in_sl3_up in range(l_in_sl3 + 1, 8):
-        print("Upper layer in SL3 = {}".format(l_in_sl3_up))
-        for d in MBTrain.layers[l_in_sl3_up].DTlist:
-            for semicell in [0.25, 0.75]:
-                xf = d.xmin + semicell*d.width
-                if abs(xf - x0) < 0.1*d.width: 
-                    m = 100000
-                else:
-                    yf = d.ymin + d.height/2.
-                    m = (yf - y0)/(xf - x0)
-                if abs(m) < mmax:  continue
-                mm = Muon(x0,y0, m)
-                if m < mmax: 
-                    mm.color = "k-"
-                MBTrainf.checkIn(mm)
-                # mm.plot()        
-                if abs(m) > mmax:
-                    allPatterns.append(mm.getPattern())
-                    allSeeds.append([l_in_sl3, l_in_sl3_up, d.idx - MBTrain.layers[l_in_sl3].DTlist[-1].idx])
+            # Final point: each layer of SL3 (excluding the one from where we start), 
+            # considering all valid cells and both lateralities
+            for l_in_sl3_up in range(l_in_sl3 + 1, 8):
+                print("Upper layer in SL3 = {}".format(l_in_sl3_up))
+                for d in MB_train.layers[l_in_sl3_up].DTlist:
+                    for semicell in [0.25, 0.75]:
+                        xf = d.xmin + semicell*d.width
+                        if abs(xf - x0) < 0.1*d.width: 
+                            m = 100000
+                        else:
+                            yf = d.ymin + d.height/2.
+                            m = (yf - y0)/(xf - x0)
+                        if abs(m) < mmax:  continue
+                        mm = Muon(x0,y0, m)
+                        if m < mmax: 
+                            mm.color = "k-"
+                        MB_train_f.checkIn(mm)
+                        # mm.plot()        
+                        if abs(m) > mmax:
+                            allPatterns.append(mm.getPattern())
+                            allSeeds.append([l_in_sl3, l_in_sl3_up, d.idx - MB_train.layers[l_in_sl3].DTlist[slope].idx])
 
 
 # Plots, printouts, and save
@@ -454,7 +159,8 @@ for i in range(len(allPatterns)):
       # print "---------------------------------"
 
 print "Patterns: ", len(listPatterns)
-pick = open("./MBTrainTraining_uncorrelated_MB4.pck", "w")
+
+pick = open(output_file_name, "w")
 pickle.dump(listPatterns, pick)
 
 """
@@ -468,7 +174,7 @@ print overlaps
 """
 
 #print listPatterns[0].overlapsw
-MBTrain.plot()
+MB_train.plot()
 
 plt.axis([0,170,-5,30])
 plt.xlabel("z/cm")
