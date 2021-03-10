@@ -3,11 +3,12 @@ import pickle
 # import ROOT
 
 # Input variable
-if len(sys.argv) < 2 :
+if len(sys.argv) < 2:
     print("Please tell me which MB patterns you want extract: MB or MB4")
     print("")
     print("python pickleToC.py MB")
     print("python pickleToC.py MB4")
+    print("python pickleToC.py Carlos")
     sys.exit()
 
 MB_input = sys.argv[1]
@@ -19,6 +20,9 @@ if MB_input == "MB":
 elif MB_input == "MB4": 
     input_file_name  = "trainedPatterns_MB4.pck"
     output_file_name = "createdPatterns_MB4"
+elif MB_input == "Carlos":
+    input_file_name  = "MBTrainTraining_uncorrelated.pck"
+    output_file_name = "MBTrainTraining_uncorrelated"
 else:
     raise ValueError("Input must be 'MB' or 'MB4'")
 

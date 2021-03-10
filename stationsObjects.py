@@ -307,8 +307,35 @@ l2f  = Layer(0.5*globalDTwidth - 30*globalDTwidth, 1*globalDTheight,         nDT
 l3f  = Layer(-30*globalDTwidth,                    2*globalDTheight,         nDTMBTrain+60, idx=3, offset=30)
 l4f  = Layer(0.5*globalDTwidth - 30*globalDTwidth, 3*globalDTheight,         nDTMBTrain+60, idx=4, offset=30)
 ll1f = Layer(-30.*globalDTwidth,                   4*globalDTheight + SLgap, nDTMBTrain+62, idx=5, offset=30)
-ll2f = Layer(-29.5*globalDTwidth,                  5*globalDTheight + SLgap, nDTMBTrain+62, idx=6, offset=30)
+ll2f = Layer(0.5*globalDTwidth - 30*globalDTwidth, 5*globalDTheight + SLgap, nDTMBTrain+62, idx=6, offset=30)
 ll3f = Layer(-30.*globalDTwidth,                   6*globalDTheight + SLgap, nDTMBTrain+62, idx=7, offset=30)
-ll4f = Layer(-29.5*globalDTwidth,                  7*globalDTheight + SLgap, nDTMBTrain+62, idx=8, offset=30)
+ll4f = Layer(0.5*globalDTwidth - 30*globalDTwidth, 7*globalDTheight + SLgap, nDTMBTrain+62, idx=8, offset=30)
 
 MBTrainf = MB([l1f,l2f,l3f,l4f,ll1f,ll2f,ll3f,ll4f])
+
+
+# # Try to copy geometry at: https://docs.google.com/document/d/144Kr25ThVqTIM6lWib_Z-fogahEJ0MX1_EY3zL-LDsU/edit
+
+# # This is used to generate muons
+# l1  = Layer(0,                  0,                        nDTMBTrain, idx=1)
+# l2  = Layer(-0.5*globalDTwidth, 1*globalDTheight,         nDTMBTrain, idx=2)
+# l3  = Layer(0,                  2*globalDTheight,         nDTMBTrain, idx=3)
+# l4  = Layer(-0.5*globalDTwidth, 3*globalDTheight,         nDTMBTrain, idx=4)
+# ll1 = Layer(0,                  4*globalDTheight + SLgap, nDTMBTrain, idx=5)
+# ll2 = Layer(-0.5*globalDTwidth, 5*globalDTheight + SLgap, nDTMBTrain, idx=6)
+# ll3 = Layer(0,                  6*globalDTheight + SLgap, nDTMBTrain, idx=7)
+# ll4 = Layer(-0.5*globalDTwidth, 7*globalDTheight + SLgap, nDTMBTrain, idx=8)
+
+# MBTrain = MB([l1,l2,l3,l4,ll1,ll2,ll3,ll4])
+
+# # And this is used to check if the generated muons fall inside the chamber
+# l1f  = Layer(-30*globalDTwidth,                     0,                        nDTMBTrain+60, idx=1, offset=30)
+# l2f  = Layer(-0.5*globalDTwidth - 30*globalDTwidth, 1*globalDTheight,         nDTMBTrain+60, idx=2, offset=30)
+# l3f  = Layer(-30*globalDTwidth,                     2*globalDTheight,         nDTMBTrain+60, idx=3, offset=30)
+# l4f  = Layer(-0.5*globalDTwidth - 30*globalDTwidth, 3*globalDTheight,         nDTMBTrain+60, idx=4, offset=30)
+# ll1f = Layer(-30.*globalDTwidth,                    4*globalDTheight + SLgap, nDTMBTrain+62, idx=5, offset=30)
+# ll2f = Layer(-0.5*globalDTwidth - 30*globalDTwidth, 5*globalDTheight + SLgap, nDTMBTrain+62, idx=6, offset=30)
+# ll3f = Layer(-30.*globalDTwidth,                    6*globalDTheight + SLgap, nDTMBTrain+62, idx=7, offset=30)
+# ll4f = Layer(-0.5*globalDTwidth - 30*globalDTwidth, 7*globalDTheight + SLgap, nDTMBTrain+62, idx=8, offset=30)
+
+# MBTrainf = MB([l1f,l2f,l3f,l4f,ll1f,ll2f,ll3f,ll4f])
