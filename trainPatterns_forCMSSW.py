@@ -9,7 +9,9 @@ import pickle
 if len(sys.argv) < 2 :
     print("Please tell me which MB you want to train the patterns for: MB or MB4")
     print("")
-    print("python trainPatterns_forCMSSW.py MB")
+    print("python trainPatterns_forCMSSW.py MB1")
+    print("python trainPatterns_forCMSSW.py MB2")
+    print("python trainPatterns_forCMSSW.py MB3")
     print("python trainPatterns_forCMSSW.py MB4")
     sys.exit()
 
@@ -24,23 +26,46 @@ allSeeds    = [] #Naming convention is [SLdown, SLup, diff in units of halfs of 
 
 # Choose which MB use for training,
 # considering those defined in stationsObjects.py
-if MB_input == "MB":
-    MB_train   = MBTrain
-    MB_train_f = MBTrainf
+
+if MB_input == "MB1_left":
+    MB_train   = MB1_left
+    MB_train_f = MB1f_left
+    output_file_name = "trainedPatterns_MB1_left.pck"
+elif MB_input == "MB1_right":
+    MB_train   = MB1_right
+    MB_train_f = MB1f_right
+    output_file_name = "trainedPatterns_MB1_right.pck"
+
+elif MB_input == "MB2_left": 
+    MB_train   = MB2_left
+    MB_train_f = MB2f_left
+    output_file_name = "trainedPatterns_MB2_left.pck"
+elif MB_input == "MB2_right": 
+    MB_train   = MB2_right
+    MB_train_f = MB2f_right
+    output_file_name = "trainedPatterns_MB2_right.pck"
+
+elif MB_input == "MB3": 
+    MB_train   = MB3
+    MB_train_f = MB3f
+    output_file_name = "trainedPatterns_MB3.pck"
+
+elif MB_input == "MB4_left": 
+    MB_train   = MB4_left
+    MB_train_f = MB4f_left
+    output_file_name = "trainedPatterns_MB4_left.pck"
 elif MB_input == "MB4": 
     MB_train   = MB4
     MB_train_f = MB4f
-else:
-    raise ValueError("Input must be 'MB' or 'MB4'")
-    
-# Output file name
-if MB_input == "MB":
-    output_file_name = "trainedPatterns_MB.pck"
-elif MB_input == "MB4": 
     output_file_name = "trainedPatterns_MB4.pck"
+elif MB_input == "MB4_right": 
+    MB_train   = MB4_right
+    MB_train_f = MB4f_right
+    output_file_name = "trainedPatterns_MB4_right.pck"
+    
 else:
-    raise ValueError("Input must be 'MB' or 'MB4'")
-
+    raise ValueError("Please revise input")
+    
 # Generate all sets of semilayer-semilayer patterns
 
 #################################################
@@ -201,10 +226,10 @@ print overlaps
 
 #print listPatterns[0].overlapsw
 
-MB_train.plot()
+MB_train_f.plot()
 
-plt.axis([0,170,-5,30])
+plt.axis([-100, 100, -5, 30])
 plt.xlabel("z/cm")
 plt.ylabel("r/cm")
-#plt.show()
+plt.show()
 
