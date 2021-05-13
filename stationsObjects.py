@@ -6,7 +6,7 @@ globalDTwidth  = 4.2
 globalDTheight = 1.3
 
 # Gap between SL1 and SL3
-SLgap     = 29 - globalDTheight*8 # originally, it was 29 - globalDTheight*8  ????
+SLgap     = 28.7 - globalDTheight*8 # originally, it was 29 - globalDTheight*8  ????
 # SLgap_MB4 = 28.7 - globalDTheight*12 # 
 
 # Number of cell per layer depending on the MB
@@ -199,7 +199,7 @@ def patternSorter(p):
 
 
 # Define function to create chambers
-def create_chamber(DT_width, DT_height, n_cells, gap, shift, additional_cells = 0):
+def create_chamber(DT_width, DT_height, n_cells, gap, shift = 0, additional_cells = 0):
     """shift is un units of DT_width. 
     - positive shift: SL3 shifted to the right wrt SL1;
     - negative shift: SL3 shifted to the left wrt SL1;
@@ -211,7 +211,7 @@ def create_chamber(DT_width, DT_height, n_cells, gap, shift, additional_cells = 
     layer3 = Layer(-additional_cells*DT_width,                 2*DT_height,       n_cells, idx=3, offset=additional_cells)
     layer4 = Layer((-additional_cells + 0.5)*DT_width,         3*DT_height,       n_cells, idx=4, offset=additional_cells)
 
-    # Define layers for SL1
+    # Define layers for SL3
     layer5 = Layer((-additional_cells + shift)*DT_width,       4*DT_height + gap, n_cells, idx=5, offset=additional_cells)
     layer6 = Layer((-additional_cells + 0.5 + shift)*DT_width, 5*DT_height + gap, n_cells, idx=6, offset=additional_cells)
     layer7 = Layer((-additional_cells + shift)*DT_width,       6*DT_height + gap, n_cells, idx=7, offset=additional_cells)
@@ -224,7 +224,7 @@ def create_chamber(DT_width, DT_height, n_cells, gap, shift, additional_cells = 
 
 
 # Now define chambers.
-# Try to copy geometry at: https://docs.google.com/document/d/144Kr25ThVqTIM6lWib_Z-fogahEJ0MX1_EY3zL-LDsU/edit
+# Reference for geometry at: https://docs.google.com/document/d/144Kr25ThVqTIM6lWib_Z-fogahEJ0MX1_EY3zL-LDsU/edit
 
 #####################
 # Define MB1 chambers
@@ -277,165 +277,3 @@ MB4_right  = create_chamber(globalDTwidth, globalDTheight, nDTMB4, SLgap, +2)
 MB4f_left  = create_chamber(globalDTwidth, globalDTheight, nDTMB4, SLgap, -2, additional_cells = 30)
 MB4f       = create_chamber(globalDTwidth, globalDTheight, nDTMB4, SLgap,  0, additional_cells = 30)
 MB4f_right = create_chamber(globalDTwidth, globalDTheight, nDTMB4, SLgap, +2, additional_cells = 30)
-
-
-
-
-# #####################
-# # Define MB1 chambers
-
-# # In MB1, SL3 is shifted half a cell to the left wrt SL1
-
-# # This is used to generate muons
-# l1  = Layer(0,                    0,                      nDTMB1, idx=1)
-# l2  = Layer(0.5*globalDTwidth,    globalDTheight,         nDTMB1, idx=2)
-# l3  = Layer(0,                  2*globalDTheight,         nDTMB1, idx=3)
-# l4  = Layer(0.5*globalDTwidth,  3*globalDTheight,         nDTMB1, idx=4)
-
-# ll1 = Layer(-0.5*globalDTwidth, 4*globalDTheight + SLgap, nDTMB1, idx=5)
-# ll2 = Layer(0,                  5*globalDTheight + SLgap, nDTMB1, idx=6)
-# ll3 = Layer(-0.5*globalDTwidth, 6*globalDTheight + SLgap, nDTMB1, idx=7)
-# ll4 = Layer(0,                  7*globalDTheight + SLgap, nDTMB1, idx=8)
-
-# MB1 = MB([l1, l2, l3, l4, ll1, ll2, ll3, ll4])
-
-# # And this is used to check if the generated muons fall inside the chamber
-# l1f  = Layer(-30*globalDTwidth,                        0,                     nDTMB1+60, idx=1, offset=30)
-# l2f  = Layer(0.5*globalDTwidth - 30*globalDTwidth,   globalDTheight,          nDTMB1+60, idx=2, offset=30)
-# l3f  = Layer(-30*globalDTwidth,                     2*globalDTheight,         nDTMB1+60, idx=3, offset=30)
-# l4f  = Layer(0.5*globalDTwidth - 30*globalDTwidth,  3*globalDTheight,         nDTMB1+60, idx=4, offset=30)
-
-# ll1f = Layer(-0.5*globalDTwidth - 30*globalDTwidth, 4*globalDTheight + SLgap, nDTMB1+60, idx=5, offset=30)
-# ll2f = Layer(-30*globalDTwidth,                     5*globalDTheight + SLgap, nDTMB1+60, idx=6, offset=30)
-# ll3f = Layer(-0.5*globalDTwidth - 30*globalDTwidth, 6*globalDTheight + SLgap, nDTMB1+60, idx=7, offset=30)
-# ll4f = Layer(-30*globalDTwidth,                     7*globalDTheight + SLgap, nDTMB1+60, idx=8, offset=30)
-
-# MB1f = MB([l1f, l2f, l3f, l4f, ll1f, ll2f, ll3f, ll4f])
-
-
-# #####################
-# # Define MB2 chambers
-
-# # In MB2, SL3 is shifted one cell to the right wrt SL1
-
-# # This is used to generate muons
-# l1  = Layer(0,                   0,                      nDTMB2, idx=1)
-# l2  = Layer(0.5*globalDTwidth,   globalDTheight,         nDTMB2, idx=2)
-# l3  = Layer(0,                 2*globalDTheight,         nDTMB2, idx=3)
-# l4  = Layer(0.5*globalDTwidth, 3*globalDTheight,         nDTMB2, idx=4)
-                                                                      
-# ll1 = Layer(globalDTwidth,     4*globalDTheight + SLgap, nDTMB2, idx=5)
-# ll2 = Layer(1.5*globalDTwidth, 5*globalDTheight + SLgap, nDTMB2, idx=6)
-# ll3 = Layer(globalDTwidth,     6*globalDTheight + SLgap, nDTMB2, idx=7)
-# ll4 = Layer(1.5*globalDTwidth, 7*globalDTheight + SLgap, nDTMB2, idx=8)
-
-# MB2 = MB([l1,l2,l3,l4,ll1,ll2,ll3,ll4])
-
-# # And this is used to check if the generated muons fall inside the chamber
-# l1f  = Layer(-30*globalDTwidth,                       0,                      nDTMB2+60, idx=1, offset=30)
-# l2f  = Layer(0.5*globalDTwidth - 30*globalDTwidth,    globalDTheight,         nDTMB2+60, idx=2, offset=30)
-# l3f  = Layer(-30*globalDTwidth,                     2*globalDTheight,         nDTMB2+60, idx=3, offset=30)
-# l4f  = Layer(0.5*globalDTwidth - 30*globalDTwidth,  3*globalDTheight,         nDTMB2+60, idx=4, offset=30)
-
-# ll1f = Layer(globalDTwidth - 30*globalDTwidth,      4*globalDTheight + SLgap, nDTMB2+60, idx=5, offset=30)
-# ll2f = Layer(1.5*globalDTwidth - 30*globalDTwidth,  5*globalDTheight + SLgap, nDTMB2+60, idx=6, offset=30)
-# ll3f = Layer(globalDTwidth - 30*globalDTwidth,      6*globalDTheight + SLgap, nDTMB2+60, idx=7, offset=30)
-# ll4f = Layer(1.5*globalDTwidth - 30*globalDTwidth,  7*globalDTheight + SLgap, nDTMB2+60, idx=8, offset=30)
-
-# MB2f = MB([l1f,l2f,l3f,l4f,ll1f,ll2f,ll3f,ll4f])
-
-
-# #####################
-# # Define MB3 chambers
-
-# # In MB3, SL1 and SL3 are aligned :)
-
-# # This is used to generate muons
-# l1  = Layer(0,                   0,                      nDTMB3, idx=1)
-# l2  = Layer(0.5*globalDTwidth,   globalDTheight,         nDTMB3, idx=2)
-# l3  = Layer(0,                 2*globalDTheight,         nDTMB3, idx=3)
-# l4  = Layer(0.5*globalDTwidth, 3*globalDTheight,         nDTMB3, idx=4)
-                                                                      
-# ll1 = Layer(0,                 4*globalDTheight + SLgap, nDTMB3, idx=5)
-# ll2 = Layer(0.5*globalDTwidth, 5*globalDTheight + SLgap, nDTMB3, idx=6)
-# ll3 = Layer(0,                 6*globalDTheight + SLgap, nDTMB3, idx=7)
-# ll4 = Layer(0.5*globalDTwidth, 7*globalDTheight + SLgap, nDTMB3, idx=8)
-
-# MB3 = MB([l1,l2,l3,l4,ll1,ll2,ll3,ll4])
-
-# # And this is used to check if the generated muons fall inside the chamber
-# l1f  = Layer(-30*globalDTwidth,                       0,                      nDTMB3+60, idx=1, offset=30)
-# l2f  = Layer(0.5*globalDTwidth - 30*globalDTwidth,    globalDTheight,         nDTMB3+60, idx=2, offset=30)
-# l3f  = Layer(-30*globalDTwidth,                     2*globalDTheight,         nDTMB3+60, idx=3, offset=30)
-# l4f  = Layer(0.5*globalDTwidth - 30*globalDTwidth,  3*globalDTheight,         nDTMB3+60, idx=4, offset=30)
-
-# ll1f = Layer(-30*globalDTwidth,                     4*globalDTheight + SLgap, nDTMB3+60, idx=5, offset=30)
-# ll2f = Layer(0.5*globalDTwidth - 30*globalDTwidth,  5*globalDTheight + SLgap, nDTMB3+60, idx=6, offset=30)
-# ll3f = Layer(-30*globalDTwidth,                     6*globalDTheight + SLgap, nDTMB3+60, idx=7, offset=30)
-# ll4f = Layer(0.5*globalDTwidth - 30*globalDTwidth,  7*globalDTheight + SLgap, nDTMB3+60, idx=8, offset=30)
-
-# MB3f = MB([l1f,l2f,l3f,l4f,ll1f,ll2f,ll3f,ll4f])
-
-# #####################
-# # Define MB4 chambers
-
-# # In MB4, SL3 is shifted two cells to the right wrt SL1
-# # Addtionally, MB4 is missing SL2: SL1 and SL3 are closer (SLgap_MB4 is 1 SL shorter than SLgap)
-
-# # This is used to generate muons
-# l1  = Layer(0,                   0,                          nDTMBTrain, idx=1)
-# l2  = Layer(0.5*globalDTwidth,   globalDTheight,             nDTMBTrain, idx=2)
-# l3  = Layer(0,                 2*globalDTheight,             nDTMBTrain, idx=3)
-# l4  = Layer(0.5*globalDTwidth, 3*globalDTheight,             nDTMBTrain, idx=4)
-
-# ll1 = Layer(2*globalDTwidth,   4*globalDTheight + SLgap_MB4, nDTMBTrain, idx=5)
-# ll2 = Layer(2.5*globalDTwidth, 5*globalDTheight + SLgap_MB4, nDTMBTrain, idx=6)
-# ll3 = Layer(2*globalDTwidth,   6*globalDTheight + SLgap_MB4, nDTMBTrain, idx=7)
-# ll4 = Layer(2.5*globalDTwidth, 7*globalDTheight + SLgap_MB4, nDTMBTrain, idx=8)
-
-# MB4 = MB([l1,l2,l3,l4,ll1,ll2,ll3,ll4])
-
-# # And this is used to check if the generated muons fall inside the chamber
-# l1f  = Layer(-30*globalDTwidth,                    0,                            nDTMBTrain+60, idx=1, offset=30)
-# l2f  = Layer(0.5*globalDTwidth - 30*globalDTwidth, 1*globalDTheight,             nDTMBTrain+60, idx=2, offset=30)
-# l3f  = Layer(-30*globalDTwidth,                    2*globalDTheight,             nDTMBTrain+60, idx=3, offset=30)
-# l4f  = Layer(0.5*globalDTwidth - 30*globalDTwidth, 3*globalDTheight,             nDTMBTrain+60, idx=4, offset=30)
-
-# ll1f = Layer(2*globalDTwidth   - 30*globalDTwidth, 4*globalDTheight + SLgap_MB4, nDTMBTrain+60, idx=5, offset=30)
-# ll2f = Layer(2.5*globalDTwidth - 30*globalDTwidth, 5*globalDTheight + SLgap_MB4, nDTMBTrain+60, idx=6, offset=30)
-# ll3f = Layer(2*globalDTwidth   - 30*globalDTwidth, 6*globalDTheight + SLgap_MB4, nDTMBTrain+60, idx=7, offset=30)
-# ll4f = Layer(2.5*globalDTwidth - 30*globalDTwidth, 7*globalDTheight + SLgap_MB4, nDTMBTrain+60, idx=8, offset=30)
-
-# MB4f = MB([l1f,l2f,l3f,l4f,ll1f,ll2f,ll3f,ll4f])
-
-
-# ############################################
-# # We are currently use this for the training
-
-# # This is used to generate muons
-# l1  = Layer(0,                 0,                        nDTMBTrain, idx=1)
-# l2  = Layer(0.5*globalDTwidth, 1*globalDTheight,         nDTMBTrain, idx=2)
-# l3  = Layer(0,                 2*globalDTheight,         nDTMBTrain, idx=3)
-# l4  = Layer(0.5*globalDTwidth, 3*globalDTheight,         nDTMBTrain, idx=4)
-# ll1 = Layer(0,                 4*globalDTheight + SLgap, nDTMBTrain, idx=5)
-# ll2 = Layer(0.5*globalDTwidth, 5*globalDTheight + SLgap, nDTMBTrain, idx=6)
-# ll3 = Layer(0,                 6*globalDTheight + SLgap, nDTMBTrain, idx=7)
-# ll4 = Layer(0.5*globalDTwidth, 7*globalDTheight + SLgap, nDTMBTrain, idx=8)
-
-# MBTrain = MB([l1,l2,l3,l4,ll1,ll2,ll3,ll4])
-
-# # And this is used to check if the generated muons fall inside the chamber
-# l1f  = Layer(-30*globalDTwidth,                    0,                        nDTMBTrain+60, idx=1, offset=30)
-# l2f  = Layer(0.5*globalDTwidth - 30*globalDTwidth, 1*globalDTheight,         nDTMBTrain+60, idx=2, offset=30)
-# l3f  = Layer(-30*globalDTwidth,                    2*globalDTheight,         nDTMBTrain+60, idx=3, offset=30)
-# l4f  = Layer(0.5*globalDTwidth - 30*globalDTwidth, 3*globalDTheight,         nDTMBTrain+60, idx=4, offset=30)
-# ll1f = Layer(-30.*globalDTwidth,                   4*globalDTheight + SLgap, nDTMBTrain+62, idx=5, offset=30)
-# ll2f = Layer(0.5*globalDTwidth - 30*globalDTwidth, 5*globalDTheight + SLgap, nDTMBTrain+62, idx=6, offset=30)
-# ll3f = Layer(-30.*globalDTwidth,                   6*globalDTheight + SLgap, nDTMBTrain+62, idx=7, offset=30)
-# ll4f = Layer(0.5*globalDTwidth - 30*globalDTwidth, 7*globalDTheight + SLgap, nDTMBTrain+62, idx=8, offset=30)
-
-# MBTrainf = MB([l1f,l2f,l3f,l4f,ll1f,ll2f,ll3f,ll4f])
-
-
-# # Try to copy geometry at: https://docs.google.com/document/d/144Kr25ThVqTIM6lWib_Z-fogahEJ0MX1_EY3zL-LDsU/edit
-

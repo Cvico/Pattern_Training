@@ -6,7 +6,9 @@ import pickle
 if len(sys.argv) < 2:
     print("Please tell me which MB patterns you want extract: MB or MB4")
     print("")
-    print("python pickleToC.py MB")
+    print("python pickleToC.py MB1")
+    print("python pickleToC.py MB2")
+    print("python pickleToC.py MB3")
     print("python pickleToC.py MB4")
     print("python pickleToC.py Carlos")
     sys.exit()
@@ -14,17 +16,39 @@ if len(sys.argv) < 2:
 MB_input = sys.argv[1]
 print("MB to use: " + MB_input)
 
-if MB_input == "MB":
-    input_file_name  = "trainedPatterns_MB.pck"
-    output_file_name = "createdPatterns_MB"
+if MB_input == "MB1_left":
+    input_file_name  = "trainedPatterns_MB1_left.pck"
+    output_file_name = "createdPatterns_MB1_left"
+elif MB_input == "MB1_right":
+    input_file_name  = "trainedPatterns_MB1_right.pck"
+    output_file_name = "createdPatterns_MB1_right"
+
+elif MB_input == "MB2_left":
+    input_file_name  = "trainedPatterns_MB2_left.pck"
+    output_file_name = "createdPatterns_MB2_left"
+elif MB_input == "MB2_right":
+    input_file_name  = "trainedPatterns_MB2_right.pck"
+    output_file_name = "createdPatterns_MB2_right"
+
+elif MB_input == "MB3": 
+    input_file_name  = "trainedPatterns_MB3.pck"
+    output_file_name = "createdPatterns_MB3"
+
+elif MB_input == "MB4_left":
+    input_file_name  = "trainedPatterns_MB4_left.pck"
+    output_file_name = "createdPatterns_MB4_left"
 elif MB_input == "MB4": 
     input_file_name  = "trainedPatterns_MB4.pck"
     output_file_name = "createdPatterns_MB4"
+elif MB_input == "MB4_right":
+    input_file_name  = "trainedPatterns_MB4_right.pck"
+    output_file_name = "createdPatterns_MB4_right"
+
 elif MB_input == "Carlos":
     input_file_name  = "MBTrainTraining_uncorrelated.pck"
     output_file_name = "MBTrainTraining_uncorrelated"
 else:
-    raise ValueError("Input must be 'MB' or 'MB4'")
+    raise ValueError("Input must be 'MB1', 'MB2', 'MB3', or 'MB4'")
 
 
 print("Loading pickle")
@@ -83,11 +107,11 @@ f.write("\n")
 # Writing patterns
 for p in patterns:
     i += 1
-    print(i, len(patterns))
+    # print(i, len(patterns))
     f.write("std::vector<std::vector<int>> pattern_"+str(i) +" = {std::vector<int> {" + str(p.seeds[0])+", "+str(p.seeds[1])+ ", " + str(p.seeds[2]) + "}, std::vector<int> {" + "}, std::vector<int>{ ".join([", ".join([str(int(i)) for i in p.hits[j][:]]) for j in range(len(p.hits)) ])+ "}};\n")
     f.write("allPatterns.push_back(pattern_{});\n".format(i))
     f.write("\n")
-    print(p.seeds, p.hits)
+    # print(p.seeds, p.hits)
 
 # Closing lines
 f.write('f->cd();\n')
